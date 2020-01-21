@@ -1,0 +1,13 @@
+---
+- name: Adding PHP Repository, Hold on...
+  apt_repository: repo=ppa:ondrej/php
+
+- name: Installing PHP, Hold on...
+  apt: name=php7.3-fpm state=latest
+  # The notify will call the ../handlers/main.yml
+  notify: service nginx restart
+
+- name: Copy info.php
+  copy:
+    src: ../templates/php/info.php
+    dest: /var/www/{{site_id}}/public_html/

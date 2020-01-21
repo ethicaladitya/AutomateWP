@@ -1,0 +1,16 @@
+---
+- name: Installing NGINX, Hold on...
+  apt: name=nginx state=latest
+  # The notify will call the ../handlers/main.yml
+  notify: service nginx restart
+
+- name: Create VHOST {{site_id}}
+  template:
+    src: ../templates/nginx/vhost.conf
+    dest: /etc/nginx/sites-enabled/{{site_id}}.conf
+
+- name: Creating /var/www/{{site_id}}/public_html/ Directory
+  file:
+    path: /var/www/{{site_id}}/public_html/
+    state: directory
+    mode: '0755'

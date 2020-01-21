@@ -1,0 +1,3 @@
+---
+- include: roles/stack/tasks/nginx.yml
+- include: roles/stack/tasks/php.yml

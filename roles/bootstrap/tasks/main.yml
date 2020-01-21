@@ -1,0 +1,17 @@
+---
+- name: Executing ping command, Hold on...
+  ping:
+
+# Make sure remote system nameserver was properly configure
+# And remote system able to reach public network
+- name: Checking Network Connection, Hold on...
+  shell: ping -c2 google.com
+
+# Setup FQDN
+- name: Setup FQDN, Hold on...
+  hostname: name={{ ansible_hostname }}
+  register: hostname
+
+# Dont Forget to Update TimeZone in PHP (UTC)
+- name: Setup Timezone to UTC, Hold on...
+  timezone: name=Etc/UTC
