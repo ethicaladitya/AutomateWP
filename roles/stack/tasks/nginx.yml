@@ -8,6 +8,7 @@
   template:
     src: ../templates/nginx/vhost.conf
     dest: /etc/nginx/sites-enabled/{{site_id}}.conf
+  notify: service nginx reload
 
 - name: Creating /var/www/{{site_id}}/public_html/ Directory
   file:
