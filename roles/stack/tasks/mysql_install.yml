@@ -1,0 +1,16 @@
+---
+
+- name: Fetch Key
+  apt_key: keyserver=keyserver.ubuntu.com id=0xF1656F24C74CD1D8
+
+- name: Adding Repository
+  apt_repository:
+    repo: deb [arch=amd64,arm64,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.4/ubuntu bionic main
+    state: present
+
+- name: Installing mysql
+  apt:
+    name:
+      - mariadb-server
+      - mariadb-client
+    state: latest

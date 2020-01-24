@@ -7,8 +7,14 @@
 - name: Create VHOST {{site_id}}
   template:
     src: ../templates/nginx/vhost.conf
-    dest: /etc/nginx/sites-enabled/{{site_id}}.conf
+    dest: /etc/nginx/sites-available/{{site_id}}.conf
   notify: service nginx reload
+
+- name: Create a symbolic link
+  file:
+    src: /etc/nginx/sites-available/{{site_id}}.conf
+    dest: /etc/nginx/sites-enabled/{{site_id}}.conf
+    state: link
 
 - name: Creating /var/www/{{site_id}}/public_html/ Directory
   file:

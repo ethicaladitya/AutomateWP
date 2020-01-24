@@ -1,17 +1,21 @@
 ---
-- name: Executing ping command, Hold on...
+- name: Pinging...
   ping:
 
-# Make sure remote system nameserver was properly configure
-# And remote system able to reach public network
-- name: Checking Network Connection, Hold on...
+# Making sure server's nameserver was properly configured
+# And server able to reach public network
+- name: Checking Network Connection...
   shell: ping -c2 google.com
 
 # Setup FQDN
-- name: Setup FQDN, Hold on...
+- name: Setup Fully Qualified Domain name...
   hostname: name={{ ansible_hostname }}
   register: hostname
 
 # Dont Forget to Update TimeZone in PHP (UTC)
-- name: Setup Timezone to UTC, Hold on...
+- name: Setup Timezone to UTC...
   timezone: name=Etc/UTC
+
+- name: Installing Required S/W
+  apt:
+    name: software-properties-common

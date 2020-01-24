@@ -1,0 +1,9 @@
+---
+
+- name: Installing WPCLI
+  get_url:
+    url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    dest: /usr/local/bin/wp
+    mode: 0755
+
+- include: roles/stack/tasks/mysql_install.yml
