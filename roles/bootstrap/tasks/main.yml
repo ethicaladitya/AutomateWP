@@ -18,4 +18,6 @@
 
 - name: Installing Required S/W
   apt:
-    name: software-properties-common
+    name:
+      - software-properties-common
+      - python3-pip

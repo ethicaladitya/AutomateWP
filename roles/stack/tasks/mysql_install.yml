@@ -14,3 +14,21 @@
       - mariadb-server
       - mariadb-client
     state: latest
+
+
+#change down as well
+- name: Create root user and password for mysql
+  mysql_user:
+    name: root
+    password: "{{ lookup('password', '/dev/null chars=ascii_letters,digits') }}"
+    encrypted: yes
+    priv: '*.*:ALL'
+    state: present
+
+- name: Create wp user and password for mysql
+  mysql_user:
+    name: "{{ site_id }}"
+    password: "{{ lookup('password', '/dev/null chars=ascii_letters,digits') }}"
+    encrypted: yes
+    priv: '*.*:ALL'
+    state: present

@@ -4,7 +4,7 @@
   gather_facts: no
   pre_tasks:
     - name: Installing python3-simplejson for Ansible, Hold on...
-      raw: apt-get update && apt-get -y install python3-simplejson
+      raw: apt-get update && apt-get -y install python3-simplejson aptitude
     - name: Gathering Facts
       setup:
 
