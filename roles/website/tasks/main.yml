@@ -6,4 +6,14 @@
     dest: /usr/local/bin/wp
     mode: 0755
 
-- include: roles/stack/tasks/mysql_install.yml
+- name: Downloading WordPress
+  become: yes
+  become_user: www-data
+  shell: wp core download
+
+- name: Fetch random salts for WordPress config
+  get_url: command curl https://api.wordpress.org/secret-key/1.1/salt/
+  register: "wp_salt"
+  sudo: no
+
+- include: roles/website/mysql.yml

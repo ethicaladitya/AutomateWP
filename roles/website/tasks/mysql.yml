@@ -1,0 +1,22 @@
+---
+# Setup Database
+# Generating MySQL DB Name
+- name: "Generating MySQl DB Name"
+  shell: echo "{{ site_id | lower }}" | tr '.' '_'
+  register: db_name
+
+# Generating MySQL DB User
+- name: "Generating MySQl Username..."
+  shell: cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n1
+  register: db_user
+
+- name: Setting up Database...
+  mysql_db:
+    name: "{{db_name.stdout }}"
+    state: present
+
+- name: Setup Database Permissions, Hold on...
+  mysql_user:
+    name: "{{ db_user.stdout }}"
+    set_fact: db_password="{{ lookup('password', '/dev/null chars=ascii_letters,digits') }}"
+    priv: "{{ db_name.stdout }}.*:ALL"
