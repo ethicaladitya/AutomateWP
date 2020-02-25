@@ -12,8 +12,10 @@
   shell: wp core download
 
 - name: Fetch random salts for WordPress config
-  get_url: command curl https://api.wordpress.org/secret-key/1.1/salt/
+  uri:
+    url: https://api.wordpress.org/secret-key/1.1/salt/
+    method: GET
+    return_content: yes
   register: "wp_salt"
-  sudo: no
 
-- include: roles/website/mysql.yml
+- include: roles/website/tasks/mysql.yml

@@ -4,19 +4,32 @@
 - name: "Generating MySQl DB Name"
   shell: echo "{{ site_id | lower }}" | tr '.' '_'
   register: db_name
+  tags: website_db
 
-# Generating MySQL DB User
-- name: "Generating MySQl Username..."
-  shell: cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n1
-  register: db_user
+
+- name: Generate MySQL Password
+  set_fact: db_password="{{ lookup('password', '/dev/null chars=ascii_letters,digits') }}"
+  tags: website_db
+
+- debug: msg={{db_name}}
+  tags: website_db
+
+- debug: msg={{db_password}}
+  tags: website_db
 
 - name: Setting up Database...
   mysql_db:
     name: "{{db_name.stdout }}"
     state: present
+  tags: website_db
 
-- name: Setup Database Permissions, Hold on...
+- name: Create MySQL user and password for mysql
   mysql_user:
-    name: "{{ db_user.stdout }}"
-    set_fact: db_password="{{ lookup('password', '/dev/null chars=ascii_letters,digits') }}"
-    priv: "{{ db_name.stdout }}.*:ALL"
+    name: "{{db_name.stdout}}"
+    password: "{{db_password}}"
+    priv: "{{db_name.stdout}}.*:ALL"
+    config_file: '/root/.my.cnf'
+    login_unix_socket: '/run/mysqld/mysqld.sock'
+    login_host: 127.0.0.1
+    host: 127.0.0.1
+  tags: website_db

@@ -6,7 +6,7 @@
 
 - name: Adding Repository
   apt_repository:
-    repo: deb [arch=amd64,arm64,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.4/ubuntu bionic main
+    repo: deb [arch=amd64,arm64,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main
     state: present
   tags: mysql
 
@@ -33,18 +33,23 @@
   when: package_install.changed == True
   tags: mysql
 
-- name: Registering mysql password for {{site_id}}
-  template:
-    src: ../templates/mysql/my.cnf
-    dest: /root/.my.cnf
-  when: package_install.changed == True
-  tags: mysql
-
-- name: Create root user and password for mysql
+- name: Change Root Password
   mysql_user:
     name: root
     password: "{{mysql_password}}"
     priv: '*.*:ALL'
     state: present
+    host: "{{item}}"
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost
   when: package_install.changed == True
   tags: mysql
+
+- name: Registering mysql password for {{site_id}}
+  template:
+    src: ../templates/mysql/my.cnf
+    dest: /root/.my.cnf
+  tags: mysql
+  when: package_install.changed == True
