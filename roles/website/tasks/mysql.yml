@@ -20,16 +20,17 @@
 - name: Setting up Database...
   mysql_db:
     name: "{{db_name.stdout }}"
+    login_unix_socket: "/run/mysqld/mysqld.sock"
+    encoding: utf8mb4
+    collation: utf8mb4_unicode_520_ci
     state: present
   tags: website_db
 
 - name: Create MySQL user and password for mysql
   mysql_user:
-    name: "{{db_name.stdout}}"
-    password: "{{db_password}}"
-    priv: "{{db_name.stdout}}.*:ALL"
-    config_file: '/root/.my.cnf'
-    login_unix_socket: '/run/mysqld/mysqld.sock'
-    login_host: 127.0.0.1
-    host: 127.0.0.1
+    name: "{{ db_name.stdout }}"
+    password: "{{ db_password }}"
+    priv: "{{ db_name.stdout }}.*:ALL"
+    login_unix_socket: "/run/mysqld/mysqld.sock"
+    host: "127.0.0.1"
   tags: website_db
